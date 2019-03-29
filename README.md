@@ -4,7 +4,7 @@ This skill provides a short analysis for a given first name.
 
 ## Setup
 
-This repository includes the lamda function for retrieving the name analysis from kabalarians.com.
+This repository includes the [lamda function](/index.js) for retrieving the name analysis from kabalarians.com.
 
 ### Voice User Interface
 
@@ -14,10 +14,10 @@ This repository includes the lamda function for retrieving the name analysis fro
 
 1. This intent may be invoked by saying a name.
 
-### Screenshot
+### Screenshot of Intent Slots
 ![AnalysisIntent](/AnalysisIntent.png)
 
-## Example script:
+## Example Script
 
 USER: Alexa, open Name Analysis
 
