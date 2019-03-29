@@ -16,7 +16,13 @@ function getAnalysis(name, gender) {
             console.log('error:', error);
             
             //Get the analysis from the HTML response body
-            var analysis = cheerio.load(body)('#headerOL li').text();
+            var analysis = cheerio.load(body)('#headerOL ul:first-of-type li:first-of-type').text();
+
+            if (analysis.length == 0) {
+                //Error message if analysis not found
+                analysis = 'Sorry, ' + name + ', I couldn\'t find an analysis for your name';
+            }
+
             resolve(analysis);
         });
     });
@@ -27,10 +33,12 @@ const LaunchRequestHandler = {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speechText = 'Welcome to Name Analysis. I can help you understand whether your first name is helping or hurting you... Would you like to try a name?';
+        const speechText = 'Welcome to Name Analysis. ' +
+            'I can help you understand whether your first name is helping or hurting you... ' +
+            'Please tell me your first name...';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt(speechText)
+            .reprompt('Please tell me your first name...')
             .getResponse();
     }
 };
@@ -47,7 +55,7 @@ const AnalysisIntentHandler = {
         var analysis = await getAnalysis(name, gender);
         
         return handlerInput.responseBuilder
-            .speak(analysis)
+            .speak(analysis + ' <break time="3s"/>Would you like to try another name?')
             .reprompt('Would you like to try another name?')
             .getResponse();
     }
@@ -58,7 +66,8 @@ const HelpIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
-        const speechText = 'You can say hello to me! How can I help?';
+        const speechText = 'I can help you understand whether your first name is helping or hurting you... ' +
+            'Please tell me your first name...';
 
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -89,25 +98,6 @@ const SessionEndedRequestHandler = {
     }
 };
 
-// The intent reflector is used for interaction model testing and debugging.
-// It will simply repeat the intent the user said. You can create custom handlers
-// for your intents by defining them above, then also adding them to the request
-// handler chain below.
-const IntentReflectorHandler = {
-    canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request.type === 'IntentRequest';
-    },
-    handle(handlerInput) {
-        const intentName = handlerInput.requestEnvelope.request.intent.name;
-        const speechText = `You just triggered ${intentName}`;
-
-        return handlerInput.responseBuilder
-            .speak(speechText)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-            .getResponse();
-    }
-};
-
 // Generic error handling to capture any syntax or routing errors. If you receive an error
 // stating the request handler chain is not found, you have not implemented a handler for
 // the intent being invoked or included it in the skill builder below.
@@ -135,8 +125,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         AnalysisIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
-        SessionEndedRequestHandler,
-        IntentReflectorHandler) // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+        SessionEndedRequestHandler)
     .addErrorHandlers(
         ErrorHandler)
     .lambda();
