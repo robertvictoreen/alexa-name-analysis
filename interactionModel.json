@@ -1,0 +1,119 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "name analysis",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "cancel",
+                        "no"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "help"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "stop",
+                        "exit",
+                        "quit"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AnalysisIntent",
+                    "slots": [
+                        {
+                            "name": "Name",
+                            "type": "AMAZON.US_FIRST_NAME",
+                            "samples": [
+                                "James"
+                            ]
+                        },
+                        {
+                            "name": "Gender",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "Male"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "start over",
+                        "{Name}",
+                        "yes"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "AnalysisIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Name",
+                            "type": "AMAZON.US_FIRST_NAME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1364212616412.1503448681192"
+                            }
+                        },
+                        {
+                            "name": "Gender",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1364212616412.726027282782"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1364212616412.1503448681192",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Please tell me your first name..."
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1364212616412.726027282782",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Hi {Name} , What's your gender?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Intent.962579018648",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "ok"
+                    }
+                ]
+            }
+        ]
+    }
+}
